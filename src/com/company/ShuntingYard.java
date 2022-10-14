@@ -1,15 +1,15 @@
 package com.company;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Stack;
 
 public class ShuntingYard {
     Stack<String> operators = new Stack<>();
-    Queue<Integer> numbers = new LinkedList<Integer>();
+    Queue<Object> numbers = new LinkedList<>();
 
    String operatorList = "+-*/";
+   String numberList = "0123456789";
 
     public String infixToPostFix(String expression) {
 /*1 + 1 infix
@@ -23,29 +23,63 @@ public class ShuntingYard {
 7.               Push the current operator onto the stack
 8.        If it's a left bracket push it onto the stack (parenthesis)
 9.        If it's a right bracket
-10.            While there's not a left bracket
- */
+10.             While there's not a left bracket at the top of the stack:
+                      Pop operators from the stack onto the output queue.
+                Pop the left bracket from the stack and discard it
+ While there are operators on the stack, pop them to the queue*/
+        for(int i = 0; i<expression.length();i++) {
+            if (numberList.contains(expression.substring(i, i + 1))) {
+                System.out.println("Found a number at position " + i);
+                addNumberToQueue(expression.substring(i, i + 1));
+            }
+                if (operatorList.contains(expression.substring(i, i + 1))) {
+                    addOperatorToStack(expression.substring(i, i + 1));
+                }
+                if (expression.substring(i, i + 1).equals("(")) {
+                    operators.push(expression.substring(i, i + 1));
+                }
+                if (expression.substring(i, i + 1).equals(")")) {
+                    while (!operators.peek().equals("(")) {
+                        numbers.add(operators.pop());
+                    }
+                    operators.pop();
+                }
 
-        for(int i = 0; i<expression.length();i++){
-             if(operatorList.contains(expression.substring(i,i+1))){
-                 addOperatorToQueue(expression.substring(i,i+1));
-             }
-             if(expression.substring(i,i+1).equals("(")){
-                 operators.push(expression.substring(i,i+1));
-             }
+
+            }
+        while (operators.size() != 0) {
+            String operatorFromStack = operators.pop();
+            numbers.add(operatorFromStack);
         }
+
+        System.out.println(numbers.size());
+
+            while (numbers.size() > 0) {
+                System.out.print(numbers.remove());
+            }
 
         return null;
     }
 
-    public void addOperatorToQueue(String operator){
+    public void addOperatorToStack(String operator){
         //PEMDAS
-        String operatorAtTopOfStack = operators.peek();
-        while(isSecondOperatorGreater(operator, operatorAtTopOfStack)){
-            Integer numFromStack = Integer.getInteger(operators.pop());
-            numbers.add(numFromStack);
+        if(operators.size() > 0) {
+            while(operators.size()>0 && isSecondOperatorGreater(operator, operators.peek())){
+            //    System.out.println(operators.size() + "size");
+                numbers.add(operators.pop());
+            }
+            operators.push(operator);
         }
-        operators.push(operator);
+        else{
+            System.out.println("Adding lonely operator");
+            operators.push(operator);
+        }
+
+    }
+
+    public void addNumberToQueue(String number){
+            System.out.println("Adding number to queue");
+            numbers.add(number);
     }
 
     public boolean isSecondOperatorGreater(String firstOperator, String secondOperator){
@@ -55,32 +89,19 @@ public class ShuntingYard {
         if(secondOperator == null){
 
         }
-        if(firstOperator.equals("+")){
-            if(secondOperator.equals("*")|| secondOperator.equals("/")){
+        if(firstOperator.equals("+")||firstOperator.equals("-")){
+            if(secondOperator.equals("*")|| secondOperator.equals("/")||secondOperator.equals("(")
+                    ||secondOperator.equals(")")){
                 return true;
             }
             else{
+
                 return false;
             }
         }
-        if(firstOperator.equals("-")){
-            if(secondOperator.equals("*")|| secondOperator.equals("/")){
-                return true;
-            }
-            else{
-                return false;
-            }
-        }
-        if(firstOperator.equals("*")){
-            if(secondOperator.equals("+")|| secondOperator.equals("-")){
-                return false;
-            }
-            else{
-                return true;
-            }
-        }
-        if(firstOperator.equals("/")){
-            if(secondOperator.equals("+")|| secondOperator.equals("-")){
+        if(firstOperator.equals("*")||firstOperator.equals("/")){
+            if(secondOperator.equals("+")|| secondOperator.equals("-")|secondOperator.equals("(")
+                    ||secondOperator.equals(")")){
                 return false;
             }
             else{
