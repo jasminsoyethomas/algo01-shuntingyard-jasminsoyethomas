@@ -95,7 +95,6 @@ public class ShuntingYard {
                 return true;
             }
             else{
-
                 return false;
             }
         }
@@ -112,7 +111,15 @@ public class ShuntingYard {
     }
 
     public String postFixToInfix(String expression) {
-
+/*
+Read the symbol from the input .based on the input symbol go to step 2 or 3.
+If symbol is operand then push it into stack.
+If symbol is operator then pop top 2 values from the stack.
+this 2 popped value is our operand .
+create a new string and put the operator between this operand in string.
+push this string into stack.
+At the end only one value remain in stack which is our infix expression.
+ */
         return null;
     }
 
