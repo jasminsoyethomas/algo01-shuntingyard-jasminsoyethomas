@@ -83,9 +83,6 @@ public class ShuntingYard {
     }
 
     public boolean isSecondOperatorGreater(String firstOperator, String secondOperator){
-        // + - * /
-        //false = secondOperator has lesser or equal precedence
-        //true = secondOperator has greater or EQUAL precedence
         if(secondOperator == null){
 
         }
