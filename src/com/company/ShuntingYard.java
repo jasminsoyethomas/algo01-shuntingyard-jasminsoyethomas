@@ -124,7 +124,6 @@ At the end only one value remain in stack which is our infix expression.
     }
 
     public boolean isValidExpression(String expressionToCheck) {
-
         return false;
     }
 
