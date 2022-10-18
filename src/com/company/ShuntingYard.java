@@ -18,7 +18,7 @@ public class ShuntingYard {
 2.        Read a token
 3.        If it's a number add it to queue
 4.        If it's an operator
-5.               While there's an operator on the top of the stack with greater precedence:
+5.               While there's an operator on the top of the stack with greater OR EQUAL precedence:
 6.                       Pop operators from the stack onto the output queue
 7.               Push the current operator onto the stack
 8.        If it's a left bracket push it onto the stack (parenthesis)
@@ -29,7 +29,6 @@ public class ShuntingYard {
  While there are operators on the stack, pop them to the queue*/
         for(int i = 0; i<expression.length();i++) {
             if (numberList.contains(expression.substring(i, i + 1))) {
-                System.out.println("Found a number at position " + i);
                 addNumberToQueue(expression.substring(i, i + 1));
             }
                 if (operatorList.contains(expression.substring(i, i + 1))) {
@@ -51,9 +50,6 @@ public class ShuntingYard {
             String operatorFromStack = operators.pop();
             numbers.add(operatorFromStack);
         }
-
-        System.out.println(numbers.size());
-
             while (numbers.size() > 0) {
                 System.out.print(numbers.remove());
             }
@@ -64,45 +60,45 @@ public class ShuntingYard {
     public void addOperatorToStack(String operator){
         //PEMDAS
         if(operators.size() > 0) {
-            while(operators.size()>0 && isSecondOperatorGreater(operator, operators.peek())){
-            //    System.out.println(operators.size() + "size");
+            while(operators.size()>0 && isSecondOperatorGreaterOrEqual(operator, operators.peek())){
+                if(operators.peek().equals(")"))
                 numbers.add(operators.pop());
             }
             operators.push(operator);
         }
         else{
-            System.out.println("Adding lonely operator");
             operators.push(operator);
         }
 
     }
 
     public void addNumberToQueue(String number){
-            System.out.println("Adding number to queue");
             numbers.add(number);
     }
 
-    public boolean isSecondOperatorGreater(String firstOperator, String secondOperator){
+    public void addNumberToStack (String number){
+        operators.push(number);
+    }
+
+    public boolean isSecondOperatorGreaterOrEqual(String firstOperator, String secondOperator){
         if(secondOperator == null){
 
         }
         if(firstOperator.equals("+")||firstOperator.equals("-")){
             if(secondOperator.equals("*")|| secondOperator.equals("/")||secondOperator.equals("(")
-                    ||secondOperator.equals(")")){
+                    ||secondOperator.equals(")")||secondOperator.equals("+")||secondOperator.equals("-")){
                 return true;
             }
             else{
                 return false;
             }
         }
-        if(firstOperator.equals("*")||firstOperator.equals("/")){
-            if(secondOperator.equals("+")|| secondOperator.equals("-")|secondOperator.equals("(")
-                    ||secondOperator.equals(")")){
-                return false;
-            }
-            else{
-                return true;
-            }
+        else if(firstOperator.equals("*")||firstOperator.equals("/")){
+           return true;
+        }
+
+       else if(firstOperator.equals("(")){
+            return false;
         }
         return false;
     }
@@ -117,14 +113,47 @@ create a new string and put the operator between this operand in string.
 push this string into stack.
 At the end only one value remain in stack which is our infix expression.
  */
-        return null;
+
+        for(int i = 0; i<expression.length();i++){
+            System.out.println("Checking: " + expression.substring(i,i+1));
+             if (numberList.contains(expression.substring(i, i + 1))) {
+                addNumberToStack(expression.substring(i, i + 1));
+                expression = expression.substring(i+1);
+                 i--;
+            }
+             //51+3+
+            else if(operatorList.contains(expression.substring(i,i+1))){
+                String x = operators.pop();
+                String y = operators.pop();
+                operators.push(expression.substring(i,i+1));
+                String operator = operators.pop();
+                String newString = "(" + y + operator + x + ")";
+                operators.push(newString);
+                expression = expression.substring(i+1);
+                operators.push(expression);
+                i--;
+            }
+            System.out.println(operators);
+            System.out.println();
+        }
+        System.out.println(operators.size());
+        return operators.pop();
     }
 
     public boolean isValidExpression(String expressionToCheck) {
+        for(int i = 0; i<expressionToCheck.length();i++){
+            if("(".contains(expressionToCheck.substring(i,i+1))){
+
+            }
+            //no letters
+            //operatos toger 1++2
+            //correct number of (), if u have ( then u have )
+        }
         return false;
     }
 
     public double evaluatePostFix(String expression) {
+        //solve the equation
         return 0;
     }
 }
