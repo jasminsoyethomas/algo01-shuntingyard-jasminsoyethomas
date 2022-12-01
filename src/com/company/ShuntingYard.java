@@ -35,6 +35,7 @@ public class ShuntingYard {
                 addOperatorToStack(expression.substring(i, i + 1));
             }
             if (expression.substring(i, i + 1).equals("(")) {
+
                 operators.push(expression.substring(i, i + 1));
             }
             if (expression.substring(i, i + 1).equals(")")) {
@@ -84,8 +85,7 @@ public class ShuntingYard {
 
         }
         if (firstOperator.equals("+") || firstOperator.equals("-")) {
-            if (secondOperator.equals("*") || secondOperator.equals("/") || secondOperator.equals("(")
-                    || secondOperator.equals(")") || secondOperator.equals("+") || secondOperator.equals("-")) {
+            if (secondOperator.equals("*") || secondOperator.equals("/") || secondOperator.equals("+") || secondOperator.equals("-")) {
                 return true;
             } else {
                 return false;
