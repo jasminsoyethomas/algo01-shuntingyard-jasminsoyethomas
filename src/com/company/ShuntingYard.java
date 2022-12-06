@@ -12,6 +12,7 @@ public class ShuntingYard {
     String numberList = "0123456789";
 
     public String infixToPostFix(String expression) {
+        System.out.println("what");
 /*1 + 1 infix
     1 1 + postfix
     1.  While there are tokens to be read:
